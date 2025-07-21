@@ -11,6 +11,25 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
 
+    env:
+      VALID_REALTOR_EMAIL: ${{ secrets.VALID_REALTOR_EMAIL }}
+      VALID_REALTTOR_PASSWORD: ${{ secrets.VALID_REALTTOR_PASSWORD }}
+      VALID_REALTTOR_ROLE: ${{ secrets.VALID_REALTTOR_ROLE }}
+      VALID_REALTTOR_FIRSTNAME: ${{ secrets.VALID_REALTTOR_FIRSTNAME }}
+      VALID_REALTTOR_LASTNAME: ${{ secrets.VALID_REALTTOR_LASTNAME }}
+
+      VALID_ADMIN_EMAIL: ${{ secrets.VALID_ADMIN_EMAIL }}
+      VALID_ADMIN_PASSWORD: ${{ secrets.VALID_ADMIN_PASSWORD }}
+      VALID_ADMIN_ROLE: ${{ secrets.VALID_ADMIN_ROLE }}
+      VALID_ADMIN_FIRSTNAME: ${{ secrets.VALID_ADMIN_FIRSTNAME }}
+      VALID_ADMIN_LASTNAME: ${{ secrets.VALID_ADMIN_LASTNAME }}
+
+      VALID_USER_EMAIL: ${{ secrets.VALID_USER_EMAIL }}
+      VALID_USER_PASSWORD: ${{ secrets.VALID_USER_PASSWORD }}
+      VALID_USER_ROLE: ${{ secrets.VALID_USER_ROLE }}
+      VALID_USER_FIRSTNAME: ${{ secrets.VALID_USER_FIRSTNAME }}
+      VALID_USER_LASTNAME: ${{ secrets.VALID_USER_LASTNAME }}
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
