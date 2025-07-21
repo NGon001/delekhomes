@@ -33,6 +33,7 @@ export class RegisterPage{
 
     async verifyPageLoaded(){
         await this.page.waitForLoadState("domcontentloaded");
+        await this.page.waitForURL('/' + "auth/register");
         await expect(await this.registerRealtorText).toBeVisible();
     }
 
