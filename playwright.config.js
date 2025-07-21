@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig, devices } from '@playwright/test';
+import path from 'path';
 
 /**
  * Read environment variables from file.
@@ -34,6 +35,8 @@ export default defineConfig({
     video: "on",
     screenshot: "on"
   },
+
+  globalSetup: path.resolve(__dirname, './tests/auth.setup.ts'), // global setup file
 
   /* Configure projects for major browsers */
   projects: [

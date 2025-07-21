@@ -1,4 +1,4 @@
-import { test } from '../../Helper/base.ts';
+import { test, registerData } from '../../Helper/base.ts';
 import { generateRandomEmail } from '../../Helper/tools.ts';
 
 test.describe("E2E Registration tests", () => {
@@ -7,12 +7,7 @@ test.describe("E2E Registration tests", () => {
         await homePage.goto("auth/register");
     });
 
-    const registerData = {
-        FirstName: "Joe",
-        LastName: "Smith",
-        Role: "user",
-        Password: "123456"
-    }
+
 
     /*
         1) Navigate to the registration page.
