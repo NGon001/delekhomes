@@ -44,7 +44,6 @@ test.describe("E2E Dashboard tests", () => {
         The admin is redirected to the "User List" page.
     */
 
-
     test('The admin should be able to create a new user', async ({ dashboardPage }) => {
         const email = await generateRandomEmail();
         await dashboardPage.clickUserList();
@@ -139,6 +138,4 @@ test.describe("E2E Dashboard tests", () => {
     test('The admin should be able to edit a user', async ({ dashboardPage }) => {
 
     });
-
-    
 });
