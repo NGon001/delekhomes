@@ -138,5 +138,4 @@ test.describe("E2E Dashboard tests", () => {
     test('The admin should be able to edit a user', async ({ dashboardPage }) => {
 
     });
-
 });
