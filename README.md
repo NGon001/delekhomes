@@ -25,14 +25,56 @@ To run the API and E2E tests locally, follow these steps:
 ```npx playwright test``` - 
 
 
+## 📦 Environment Setup
+
+To run the tests successfully, create a `.env` file in the project root with the following variables:
+
+```env
+VALID_REALTOR_EMAIL=
+VALID_REALTTOR_PASSWORD=
+VALID_REALTTOR_ROLE=
+VALID_REALTTOR_FIRSTNAME=
+VALID_REALTTOR_LASTNAME=
+
+VALID_ADMIN_EMAIL=
+VALID_ADMIN_PASSWORD=
+VALID_ADMIN_ROLE=
+VALID_ADMIN_FIRSTNAME=
+VALID_ADMIN_LASTNAME=
+
+VALID_USER_EMAIL=
+VALID_USER_PASSWORD=
+VALID_USER_ROLE=
+VALID_USER_FIRSTNAME=
+VALID_USER_LASTNAME=
+```
+
 ## 🚀 Features Covered
-### E2E
+### 🔐 Login (E2E)
 | Test Case | Summary |
-|-----------|-------------|
-| ✅ TC1 | Should not register with invalid email (No @ Sign) |
-| ✅ TC2 | Should register a new account |
-| ✅ TC3 | Should register as a Realtor with the default role "User" |
-| ✅ TC4 | Should not register without entering all required details |
+|-----------|---------|
+| ✅ TC1 | Should log in with an existing User account |
+| ✅ TC2 | Should not log in with invalid credentials |
+| ✅ TC3 | Should not login without email and password |
+| ✅ TC4 | Should log out |
+
+### 📝 Registration (E2E)
+| Test Case | Summary |
+|-----------|---------|
+| ✅ TC5 | Should not register with invalid email (No @ Sign) |
+| ✅ TC6 | Should register a new account |
+| ✅ TC7 | Should register as a Realtor with the default role "User" |
+| ✅ TC8 | Should not register without entering all required details |
+
+### 👤 Dashboard (E2E)
+| Test Case | Summary |
+|-----------|---------|
+| ✅ TC10 | The admin should be able to create a new user |
+
+### 🧪 Registration (API)
+| Test Case | Summary |
+|-----------|---------|
+| ✅ TC11 | Should register a new account via API |
 
 ## Test Case 1: Should not register with invalid email (No @ Sign)
 1. Navigate to the registration page.
