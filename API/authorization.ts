@@ -1,4 +1,5 @@
 import { APIRequestContext, APIResponse,expect } from '@playwright/test';
+import { Roles } from '../Helper/base';
 import { verifyResponseSchema } from '../Helper/tools';
 import { z } from 'zod';
 
@@ -26,7 +27,8 @@ export class AuthorizationAPI{
         };
     };
 
-    async verifyCreateAccountAPISchema(response, expectedCode: number, firstName: string, lastName: string, email: string, role: string, isRealtor: boolean){
+    async verifyCreateAccountAPISchema(response, expectedCode: number, firstName: string, lastName: string, email: string, role: string){
+        await expect(response.ok()).toBeTruthy();
         const schema = z.object({
             user: z.object({
                 username: z.literal(firstName),
@@ -39,7 +41,7 @@ export class AuthorizationAPI{
                     description: z.string(),
                     type: z.literal(role)
                 })),
-                isRealtor: z.literal(isRealtor),
+                isRealtor: z.boolean(),
                 phoneNumber: z.literal(null),
                 address: z.literal(null),
                 country: z.literal(null),
@@ -57,7 +59,13 @@ export class AuthorizationAPI{
         await verifyResponseSchema(response, schema);
     }
 
-    async createUser(authorization: string, firstName: string, lastName: string, email: string, isRealtor: boolean, password: string){
-        return await this.POST_CreateUser(authorization,firstName,lastName,email,isRealtor,password);
+    async createUser(authorization: string, firstName: string, lastName: string, email: string, role: string, password: string, expectedCode: number, updateUserRole){
+        const isRealtor = (role === Roles.REALTOR || role === Roles.ADMIN) ? true : false;
+        const response =  await this.POST_CreateUser(authorization,firstName,lastName,email,isRealtor,password);
+        if(isRealtor){
+            const responseBody = await response.json();
+            await updateUserRole(authorization, Number(responseBody.user.id), role, expectedCode);
+        }  
+        await this.verifyCreateAccountAPISchema(response,expectedCode, firstName, lastName,email,Roles.USER);
     }
 };
