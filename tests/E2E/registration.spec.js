@@ -1,4 +1,4 @@
-import { test, registerData } from '../../Helper/base.ts';
+import { test, registerData, Roles } from '../../Helper/base.ts';
 import { generateRandomEmail } from '../../Helper/tools.ts';
 
 test.describe("E2E Registration tests", () => {
@@ -120,7 +120,7 @@ test.describe("E2E Registration tests", () => {
         await dashboardPage.verifyPageLoaded();
         await dashboardPage.verifyRealtorMessage();
         await dashboardPage.closeRealtorMessage();
-        await dashboardPage.verifyAccountRole(registerData.Role);
+        await dashboardPage.verifyAccountRole(Roles.USER);
     });
 
     /*

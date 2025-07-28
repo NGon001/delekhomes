@@ -31,6 +31,11 @@ export class DashboardPage {
     readonly uploadImageLocator: Locator;
     readonly createSuccessMessage: Locator;
     readonly createUserButton: Locator;
+    readonly adminUserSearchInput: Locator;
+    readonly allUsersLocator: Locator;
+    readonly specificUserLocatorByEmail: (email: string) => Locator;
+    readonly treeDotsButtonLocator: (user: Locator) => Locator;
+    readonly deleteUserButtonLocator: Locator;
 
     constructor(page: Page) {
         this.imagePath = path.resolve('image.jfif')
@@ -61,6 +66,11 @@ export class DashboardPage {
         this.uploadImageLocator = this.page.locator(`input[type="file"]`);
         this.createSuccessMessage = this.page.getByText("Create success!");
         this.createUserButton = this.page.getByRole("button",{name: "Create User"});
+        this.adminUserSearchInput = this.page.getByPlaceholder("Search user...");
+        this.allUsersLocator = this.page.locator(".MuiTableRow-root.MuiTableRow-hover.css-uim1rd");
+        this.specificUserLocatorByEmail = (email: string) => this.page.locator(`tr:has(td:has-text("${email}"))`);
+        this.treeDotsButtonLocator = (user: Locator) => user.getByRole("button");
+        this.deleteUserButtonLocator = this.page.getByRole("menuitem", {name: "Delete"});
     }
 
     async verifyPageLoaded() {
@@ -125,7 +135,7 @@ export class DashboardPage {
     async verifyUserListPage() {
         await this.page.waitForLoadState("domcontentloaded");
         await this.page.waitForURL('/' + "dashboard/user/list");
-        await expect(await this.userListText).toBeVisible();
+        await expect(await this.userListText).toBeVisible({timeout: 20000});
     }
 
     async clickNewUserButton(){
@@ -163,5 +173,16 @@ export class DashboardPage {
 
     async verifyCreateSuccessMessage(){
         await expect(await this.createSuccessMessage).toBeVisible();
+    }
+
+    async searchUserByEmail(email: string){
+        await this.adminUserSearchInput.fill(email);
+        return await this.specificUserLocatorByEmail(email);
+    }
+
+    async clickDeleteUserButton(user: Locator){
+        await this.treeDotsButtonLocator(user).click();
+        await this.deleteUserButtonLocator.click();
+        await expect(await this.allUsersLocator).toHaveCount(0);
     }
 }

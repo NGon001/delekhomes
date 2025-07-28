@@ -1,28 +1,33 @@
-import { apiTest as test , registerData, Admin, Status} from '../../Helper/base.ts';
+import { apiTest as test , registerData, AdminAuthJson, Status, Roles} from '../../Helper/base.ts';
 import { generateRandomEmail } from '../../Helper/tools.js';
 
 
 test.describe("API Registration tests", () => {
 
-    test("Should register a new account", async ({ authorizationAPI }) => {
-        const email = await generateRandomEmail();
-        const token =`Bearer ${Admin.origins[0].localStorage[0].value}`;
-        const response = await authorizationAPI.createUser(
+    test("Should register a new account", async ({ authorizationAPI, dashboardAPI }) => {
+        const UserEmail = await generateRandomEmail();
+        const token =`Bearer ${AdminAuthJson.origins[0].localStorage[0].value}`;
+        await authorizationAPI.createUser(
             token,
             registerData.FirstName,
             registerData.LastName,
-            email,
-            (registerData.Role === "realtor") ? true : false, 
-            registerData.Password
-        );
-        await authorizationAPI.verifyCreateAccountAPISchema(
-            response,
+            UserEmail,
+            Roles.USER,
+            registerData.Password,
             Status.resourceCreated,
+            dashboardAPI.updateUserRole.bind(dashboardAPI)
+        );
+
+        const RealtorEmail = await generateRandomEmail();
+        await authorizationAPI.createUser(
+            token,
             registerData.FirstName,
             registerData.LastName,
-            email,
-            registerData.Role,
-            (registerData.Role === "realtor") ? true : false
+            RealtorEmail,
+            Roles.REALTOR,
+            registerData.Password,
+            Status.resourceCreated,
+            dashboardAPI.updateUserRole.bind(dashboardAPI)
         );
     });
 });
