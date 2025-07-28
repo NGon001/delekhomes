@@ -30,6 +30,8 @@ jobs:
       VALID_USER_FIRSTNAME: ${{ secrets.VALID_USER_FIRSTNAME }}
       VALID_USER_LASTNAME: ${{ secrets.VALID_USER_LASTNAME }}
 
+      VALID_USER_ID: ${{ secrets.VALID_USER_ID }}
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
