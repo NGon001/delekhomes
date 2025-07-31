@@ -3,7 +3,7 @@ import { DashboardPage } from '../Pages/dashboardPage.ts';
 import { LoginPage } from '../Pages/loginPage.ts';
 import { chromium } from '@playwright/test';
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({quiet: true});
 
 export default async function globalSetup() {
     const browser = await chromium.launch();

@@ -226,7 +226,14 @@ export class DashboardPage {
         //in order to get information from input you need to wait for netwrok, if you don't it will be empty strings.
         await this.page.waitForLoadState("domcontentloaded");
         await this.page.waitForLoadState("networkidle");
-        
+
+        await this.page.waitForFunction(
+            (input) => (input instanceof HTMLInputElement) && input.value !== "",
+            await this.userFirstNameInformationEditLocator.elementHandle(),
+            { timeout: 10000 }
+        )
+
+
         await expect(await this.userFirstNameInformationEditLocator.getAttribute("value")).toBe(firstName);
         await expect(await this.userLastNameInformationEditLocator.getAttribute("value")).toBe(lastName);
         await expect(await this.userEmailInformationEditLocator.getAttribute("value")).toBe(email);
