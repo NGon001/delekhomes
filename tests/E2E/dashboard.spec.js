@@ -147,7 +147,29 @@ test.describe("E2E Dashboard tests", () => {
         The name, surname, and email address should match the data entered in Step 5.
     */
 
-    test('The admin should be able to edit a user', async ({ dashboardPage }) => {
+    test('The admin should be able to edit a user', async ({ authorizationAPI, dashboardAPI, dashboardPage }) => {
+        //CREATE A USER ( API FOR A FAST EXECUTION )
+        const email = await generateRandomEmail();
+        const token =`Bearer ${AdminAuthJson.origins[0].localStorage[0].value}`;
+        await authorizationAPI.createUser(
+            token,
+            registerData.FirstName,
+            registerData.LastName,
+            email,
+            Roles.USER,
+            registerData.Password,
+            Status.resourceCreated,
+            dashboardAPI.updateUserRole.bind(dashboardAPI)
+        );
 
+        //FIND USER IN THE LIST
+        await dashboardPage.clickUserList();
+        await dashboardPage.verifyUserListPage();
+        const user = await dashboardPage.searchUserByEmail(email);
+
+        //EDIT USER
+        await dashboardPage.verifyUserInformationFromList(user,registerData.FirstName,registerData.LastName,Roles.USER,email);
+        await dashboardPage.clickEditUserButton(user);
+        await dashboardPage.verifyUserInformationFromEdit(registerData.FirstName,registerData.LastName,Roles.USER,email);
     });
 });

@@ -36,6 +36,17 @@ export class DashboardPage {
     readonly specificUserLocatorByEmail: (email: string) => Locator;
     readonly treeDotsButtonLocator: (user: Locator) => Locator;
     readonly deleteUserButtonLocator: Locator;
+    readonly editUserButtonLocator: Locator;
+    readonly editUserTextLocator: Locator;
+    readonly userFirstNameListLocator: (user: Locator) => Locator;
+    readonly userLastNameListLocator: (user: Locator) => Locator;
+    readonly userRoleListLocator: (user: Locator) => Locator;
+    readonly userEmailListLocator: (user: Locator) => Locator;
+    readonly userInformationEditLocator: Locator;
+    readonly userFirstNameInformationEditLocator:  Locator;
+    readonly userLastNameInformationEditLocator:  Locator;
+    readonly userRoleInputInformationEditLocator:  Locator;
+    readonly userEmailInformationEditLocator:  Locator;
 
     constructor(page: Page) {
         this.imagePath = path.resolve('image.jfif')
@@ -71,6 +82,17 @@ export class DashboardPage {
         this.specificUserLocatorByEmail = (email: string) => this.page.locator(`tr:has(td:has-text("${email}"))`);
         this.treeDotsButtonLocator = (user: Locator) => user.getByRole("button");
         this.deleteUserButtonLocator = this.page.getByRole("menuitem", {name: "Delete"});
+        this.editUserButtonLocator = this.page.getByRole("menuitem", {name: "Edit"});
+        this.editUserTextLocator = this.page.getByText("Edit user");
+        this.userFirstNameListLocator = (user: Locator) => user.locator("h6");
+        this.userLastNameListLocator = (user: Locator) => user.locator("td").nth(2);
+        this.userRoleListLocator = (user: Locator) => user.locator("td").nth(3).locator("span");
+        this.userEmailListLocator = (user: Locator) => user.locator("td").nth(4);
+        this.userInformationEditLocator = this.page.locator(`div:has-text("User is")`);
+        this.userFirstNameInformationEditLocator =  this.page.locator(`input[name="username"]`);
+        this.userLastNameInformationEditLocator =  this.page.locator(`input[name="user_surname"]`);
+        this.userEmailInformationEditLocator = this.page.locator(`input[name="email"]`);
+        this.userRoleInputInformationEditLocator =  this.page.locator(`div[id="mui-component-select-role"]`);
     }
 
     async verifyPageLoaded() {
@@ -184,5 +206,31 @@ export class DashboardPage {
         await this.treeDotsButtonLocator(user).click();
         await this.deleteUserButtonLocator.click();
         await expect(await this.allUsersLocator).toHaveCount(0);
+    }
+    
+    async clickEditUserButton(user: Locator){
+        await this.treeDotsButtonLocator(user).click();
+        await this.editUserButtonLocator.click();
+        await expect(await this.editUserTextLocator).toBeVisible();
+    }
+
+    async verifyUserInformationFromList(user: Locator, firstName, lastName, role, email){
+        await expect(await this.userFirstNameListLocator(user).textContent()).toBe(firstName);
+        await expect(await this.userLastNameListLocator(user).textContent()).toBe(lastName);
+        const roleString = await this.userRoleListLocator(user).textContent();
+        await expect(await roleString?.toLowerCase()).toBe(role);
+        await expect(await this.userEmailListLocator(user).textContent()).toBe(email);
+    }
+
+    async verifyUserInformationFromEdit(firstName, lastName, role, email){
+        //in order to get information from input you need to wait for netwrok, if you don't it will be empty strings.
+        await this.page.waitForLoadState("domcontentloaded");
+        await this.page.waitForLoadState("networkidle");
+        
+        await expect(await this.userFirstNameInformationEditLocator.getAttribute("value")).toBe(firstName);
+        await expect(await this.userLastNameInformationEditLocator.getAttribute("value")).toBe(lastName);
+        await expect(await this.userEmailInformationEditLocator.getAttribute("value")).toBe(email);
+
+        await expect(await this.userRoleInputInformationEditLocator.textContent()).toBe(role);
     }
 }
