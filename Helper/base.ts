@@ -8,7 +8,7 @@ import { AuthorizationAPI } from '../API/authorization.ts';
 import { DashboardAPI } from '../API/dashboard.ts';
 import fs from 'fs';
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({quiet: true});
 
 export const registerData = {
     FirstName: "Joe",
