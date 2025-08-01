@@ -25,7 +25,11 @@ export class DashboardAPI{
     }
 
     async verifyRoleUpdateAPISchema(response, userId: number, role: string, expectedCode){
-        await expect(response.ok()).toBeTruthy();
+        
+        if(!response.ok()){
+            throw new Error(`Body response: \n${JSON.stringify(await response.json(), null, 2)}`);
+        }   
+
         const schema = z.object({
             id: z.literal(Number(userId)),
             username: z.string(),
