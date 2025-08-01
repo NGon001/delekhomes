@@ -100,6 +100,56 @@ test.describe("E2E Dashboard tests", () => {
         await dashboardPage.clickDeleteUserButton(user);
     });
 
+    test('The admin should be able to delete a user', async ({ dashboardPage, authorizationAPI, dashboardAPI }) => {
+        //CREATE A REALTOR USER ( API FOR A FAST EXECUTION )
+        const email = await generateRandomEmail();
+        const token =`Bearer ${AdminAuthJson.origins[0].localStorage[0].value}`;
+        await authorizationAPI.createUser(
+            token,
+            registerData.FirstName,
+            registerData.LastName,
+            email,
+            Roles.USER,
+            registerData.Password,
+            Status.resourceCreated,
+            dashboardAPI.updateUserRole.bind(dashboardAPI)
+        );
+
+        //FIND THE REALTOR USER IN THE LIST
+        await dashboardPage.clickUserList();
+        await dashboardPage.verifyUserListPage();
+        const user = await dashboardPage.searchUserByEmail(email);
+
+        //DELETE THE REALTOR USER
+
+        await dashboardPage.clickDeleteUserButton(user);
+    });
+
+    test('The admin should be able to delete a admin', async ({ dashboardPage, authorizationAPI, dashboardAPI }) => {
+        //CREATE A REALTOR USER ( API FOR A FAST EXECUTION )
+        const email = await generateRandomEmail();
+        const token =`Bearer ${AdminAuthJson.origins[0].localStorage[0].value}`;
+        await authorizationAPI.createUser(
+            token,
+            registerData.FirstName,
+            registerData.LastName,
+            email,
+            Roles.ADMIN,
+            registerData.Password,
+            Status.resourceCreated,
+            dashboardAPI.updateUserRole.bind(dashboardAPI)
+        );
+
+        //FIND THE REALTOR USER IN THE LIST
+        await dashboardPage.clickUserList();
+        await dashboardPage.verifyUserListPage();
+        const user = await dashboardPage.searchUserByEmail(email);
+
+        //DELETE THE REALTOR USER
+
+        await dashboardPage.clickDeleteUserButton(user);
+    });
+
     /*
     1) Navigate to the dashboard page.
         Expected result

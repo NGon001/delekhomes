@@ -28,7 +28,11 @@ export class AuthorizationAPI{
     };
 
     async verifyCreateAccountAPISchema(response, expectedCode: number, firstName: string, lastName: string, email: string, role: string){
-        await expect(response.ok()).toBeTruthy();
+        
+        if(!response.ok()){
+            throw new Error(`Body response: \n${JSON.stringify(await response.json(), null, 2)}`);
+        }   
+
         const schema = z.object({
             user: z.object({
                 username: z.literal(firstName),
